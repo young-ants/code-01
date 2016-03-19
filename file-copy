@@ -1,0 +1,92 @@
+/**
+  普通的文件流复制文件
+*/
+
+//----一次性只读取一个字节
+public static void main(String[] args) {
+  //创建文件输入流对象，将本地文件读到服务器端
+  FileInputStream fis = new FileInputStream("xxx.mp3");
+  //创建文件输出流对象，将服务器文件写到目标文件中
+  FileOutputStream fos = new FileOutputStream("yyy.mp3");
+  
+  //定义一个标志，判断文件是否读取完成
+  int b = 0;
+  //循环读取文件，当读到的是-1时，表示文件已经读取完成
+  while((b = fis.read()) != -1) {
+    //将每次读到的字节写到目标文件中
+    fos.write(b);
+  }
+  //关流，释放资源
+  fis.close();
+  fos.close();
+}
+
+
+
+//----一次性读取多个字节
+public static void main(String[] args) {
+  //创建文件输入流对象，读取磁盘文件到服务器
+  FileInputStream fis = new FileInputStream("xxx.txt");
+  //创建文件输出流对象，将服务器文件写到目标文件
+  FileOutputStream fos = new FileOutputStream("yyy.txt");
+  
+  //创建字节数组，一次性读取多个字节
+  byte[] b = new byte[1024];
+  //定义整型变量
+  int len = 0;
+  //循环读写文件
+  while((len = fis.read(b)) != -1) {
+    //循环写文件
+    fos.write(b,0,len);
+  }
+  //关流释放资源
+  fis.close();
+  fos.close();
+}
+
+/**
+  字节缓冲流复制文件
+*/
+//---一次性读取一个字节
+public static void main(String[] args) {
+  //创建文件输入流对象，读取本地磁盘文件
+  FileInputStream fis = new FileInputStream("xxx.txt");
+  //创建文件输入缓冲流
+  BufferedInputStream bis = new BufferedInputStream(fis);
+  //创建文件输出流，写入目标文件
+  FileOutputStream fos = new FileOutputStream("yyy.txt");
+  //创建文件输出缓冲流对象，写目标文件
+  BufferedOutputStream bos = new BufferedOutputStream(fos);
+  
+  //创建一个常量
+  int b = 0;
+  //不停的读取文件
+  while((b = bis.read()) != -1) {
+    //将每次读到的数据写到目标文件
+    bos.write(b);
+  }
+  //关闭流，释放资源，只需要关闭缓冲流
+  bis.close();
+  bos.close();
+}
+
+//----一次性读取多个字节
+public static void main(String[] args) {
+  //创建文件输入缓冲流对象，读取磁盘文件
+  BufferedInputStream bis = new BufferedInputStream(new FileInputStream("xxx.txt"));
+  //创建文件输出缓冲流对象，将文件写到目标文件中
+  BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("yyy.text"));
+  
+  //定义字节数组，每次读取一定的字节
+  byte[] b = new byte[1024*8];
+  int len = 0;
+  //不断的读取文件，按照一定的字节长度读取，放到临时的字节数组中
+  while((len = bis.read(b)) != -1) {
+    //将读取到的文件写到目标文件中
+    bos.write(b,0,len);
+  }
+  
+  //关流释放资源
+  bis.close();
+  bos.close();
+}
